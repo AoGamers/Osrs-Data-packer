@@ -21,6 +21,7 @@ open class Index(origin: CacheLibrary, id: Int, val raf: RandomAccessFile) : Ref
     var whirlpool: ByteArray? = null
     var compressionType: CompressionType = CompressionType.NONE
     var compressor: Compressor = EmptyCompressor
+    var writeReferenceTable = false
     private var cached = false
     protected var closed = false
 

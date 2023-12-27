@@ -129,6 +129,7 @@ open class CacheLibrary(val path: String, val clearDataAfterUpdate: Boolean = fa
                     writeReferenceTable: Boolean = true, id: Int = if (indices.isEmpty()) 0 else indexCount() + 1): Index {
         val raf = RandomAccessFile(File(path, "$CACHE_FILE_NAME.idx$id"), "rw")
         val index = (if (is317()) Index317(this, id, raf) else Index(this, id, raf)).also { indices[id] = it }
+        index.writeReferenceTable = writeReferenceTable
         if (!writeReferenceTable) {
             return index
         }
@@ -158,6 +159,16 @@ open class CacheLibrary(val path: String, val clearDataAfterUpdate: Boolean = fa
         return createIndex(index.compressionType, index.version, index.revision,
             index.isNamed(), index.hasWhirlpool(), index.hasFlag4(), index.hasFlag8(), writeReferenceTable, index.id)
     }
+
+    fun createIndexOrGet(index: Index,indexID : Int): Index {
+        return if (exists(indexID)) {
+            index(indexID)
+        } else {
+            createIndex(index.compressionType, index.version, index.revision,
+                index.isNamed(), index.hasWhirlpool(), index.hasFlag4(), index.hasFlag8(), index.writeReferenceTable, indexID)
+        }
+    }
+
 
     fun exists(id: Int): Boolean {
         return indices.containsKey(id)
