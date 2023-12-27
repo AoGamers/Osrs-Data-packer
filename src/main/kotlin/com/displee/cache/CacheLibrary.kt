@@ -164,9 +164,8 @@ open class CacheLibrary(val path: String, val clearDataAfterUpdate: Boolean = fa
         return if (exists(indexID)) {
             index(indexID)
         } else {
-            createIndex(compressionType = index.compressionType,
-                named = index.isNamed(), whirlpool = index.hasWhirlpool(), flag4 = index.hasFlag4(), flag8 = index.hasFlag8(),
-                writeReferenceTable = index.writeReferenceTable, id = indexID)
+            createIndex(index.compressionType, index.version, index.revision,
+                index.isNamed(), index.hasWhirlpool(), index.hasFlag4(), index.hasFlag8(), index.writeReferenceTable, indexID)
         }
     }
 
